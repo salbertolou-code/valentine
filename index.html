@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Valentine 💖</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        background: linear-gradient(135deg, #ffd6e8, #ffeef5);
+        backdrop-filter: blur(6px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-family: 'Poppins', sans-serif;
+        overflow: hidden;
+    }
+
+    h1 {
+        font-family: 'Pacifico', cursive;
+        font-size: 3.2rem;
+        color: #d63384;
+        margin-bottom: 40px;
+        text-shadow: 0 0 15px rgba(214,51,132,.4);
+    }
+
+    #container {
+        z-index: 2;
+    }
+
+    button {
+        font-size: 1.4rem;
+        padding: 15px 35px;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+    }
+
+    #yes {
+        background: #ff4d88;
+        color: white;
+        box-shadow: 0 10px 25px rgba(255, 77, 136, 0.5);
+    }
+
+    #no {
+        background: #ccc;
+        color: #555;
+        position: fixed;
+        left: 60%;
+        top: 55%;
+        transition: all 0.15s linear;
+    }
+
+    /* Pantalla final */
+    #love {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        z-index: 3;
+        animation: fadeIn 1s ease forwards;
+    }
+
+    .heart {
+        font-size: 13rem;
+        animation: pulse 0.8s infinite;
+        filter: drop-shadow(0 0 25px red);
+    }
+
+    .text {
+        font-family: 'Pacifico', cursive;
+        font-size: 3.2rem;
+        color: #d63384;
+        margin-top: 20px;
+    }
+
+    #final {
+        display: none;
+        font-size: 2.4rem;
+        margin-top: 30px;
+        color: #ff2f7d;
+        animation: fadeIn 1.5s ease forwards;
+    }
+
+    /* Lluvia */
+    .rain-heart {
+        position: fixed;
+        top: -50px;
+        font-size: 2rem;
+        animation: fall linear forwards;
+        pointer-events: none;
+    }
+
+    @keyframes fall {
+        to {
+            transform: translateY(110vh);
+            opacity: 0;
+        }
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.3); }
+        100% { transform: scale(1); }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.8); }
+        to { opacity: 1; transform: scale(1); }
+    }
+</style>
+</head>
+<body>
+
+<audio id="music" src="luluna.mp3"></audio>
+
+<div id="container">
+    <h1>María… ¿quieres ser mi Valentine? 💘</h1>
+    <button id="yes">Sí 💖</button>
+</div>
+
+<button id="no">No 🙄</button>
+
+<div id="love">
+    <div class="heart">❤️</div>
+    <div class="text">Te quiero princesa 💕</div>
+    <div id="final">Ahora ya no te puedes escapar 😌💘</div>
+</div>
+
+<script>
+    const noBtn = document.getElementById("no");
+    const music = document.getElementById("music");
+    const noTexts = ["No 🙄", "¿segura? 😏", "piénsalo bien 👀", "no mientas 😌", "ya sabes que sí 💘"];
+    let noIndex = 0;
+
+    document.addEventListener("mousemove", e => {
+        const rect = noBtn.getBoundingClientRect();
+        const distance = Math.hypot(
+            e.clientX - (rect.left + rect.width / 2),
+            e.clientY - (rect.top + rect.height / 2)
+        );
+
+        if (distance < 120) {
+            noIndex = (noIndex + 1) % noTexts.length;
+            noBtn.textContent = noTexts[noIndex];
+            noBtn.style.left = Math.random() * (window.innerWidth - rect.width) + "px";
+            noBtn.style.top = Math.random() * (window.innerHeight - rect.height) + "px";
+        }
+    });
+
+    document.getElementById("yes").addEventListener("click", () => {
+        document.getElementById("container").style.display = "none";
+        noBtn.style.display = "none";
+        document.getElementById("love").style.display = "flex";
+        music.play();
+        startRain();
+
+        setTimeout(() => {
+            document.getElementById("final").style.display = "block";
+        }, 5000);
+    });
+
+    function startRain() {
+        setInterval(() => {
+            const heart = document.createElement("div");
+            heart.className = "rain-heart";
+            heart.textContent = "❤️";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = (2 + Math.random() * 3) + "s";
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 5000);
+        }, 200);
+    }
+</script>
+
+</body>
+</html>
